@@ -1,6 +1,7 @@
 Attribute VB_Name = "formatter"
 Option Explicit
 
+' Запуск всех функций
 Sub Форматировать_Документ()
 
     Замена_множественных_пробелов_на_один
@@ -71,15 +72,26 @@ Attribute Удаление_пробелов_около_скобок.VB_ProcData.VB_Invoke_Func = "Project.f
 
 End Sub
 
+' 4
+Sub Сокращение_множественных_пробелов()
+Attribute Сокращение_множественных_пробелов.VB_Description = "Заменяет множественные пробелы на один"
+Attribute Сокращение_множественных_пробелов.VB_ProcData.VB_Invoke_Func = "Project.formatter.Сокращение_множественных_пробелов"
+
+    ' Заменяет множественные пробелы на один
+    ReplaceString "[^s ]@([!^s ])", " \1"
+
+End Sub
+
+
 ' 5
 Sub Удаление_пробелов_в_начале_и_в_конце_абзаца()
 Attribute Удаление_пробелов_в_начале_и_в_конце_абзаца.VB_Description = "Удаление пробелов в начале и в конце абзаца (вокруг символа «^p»)"
 Attribute Удаление_пробелов_в_начале_и_в_конце_абзаца.VB_ProcData.VB_Invoke_Func = "Project.formatter.Удаление_пробелов_в_начале_и_в_конце_абзаца"
 
     ' Удаление пробелов в начале и в конце абзаца (вокруг символа «^p»)
-    ReplaceString "^13[ ^s]{1;}", vbCr
-    ReplaceString "[ ^s]{1;}^13", vbCr
-    
+    ReplaceString "^13[ ^s]@([!^s ])", "^13\1"
+    ReplaceString " " + vbCr, vbCr
+
 End Sub
 
 ' 6
@@ -474,7 +486,7 @@ Private Function ProcessImages()
     For Each objShape In ActiveDocument.Shapes
         If objShape.Type = msoPicture Then
             objShape.WrapFormat.Type = wdWrapSquare
-            
+
         End If
     Next objShape
 
